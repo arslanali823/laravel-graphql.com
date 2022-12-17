@@ -1,0 +1,14 @@
+extend type Query {
+    post(id: ID @eq): Post @find
+    posts: [Post]! @paginate
+}
+
+type Post {
+    id: ID!
+    user_id: ID!
+    author: User! @belongsTo @with(relation: "author")
+    title: String!
+    content: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}

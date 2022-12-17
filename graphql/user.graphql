@@ -1,0 +1,39 @@
+extend type Query {
+    user(id: ID @eq): User @find
+    users: [User!]! @paginate
+
+    #    user(
+    #      "Search by primary key."
+    #      id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+
+    #      "Search by email address."
+    #      email: String @eq @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    #    ): User @find
+
+    #    "List multiple users using pagination."
+    #    users(
+    #      "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+    #      name: String @where(operator: "like")
+    #    ): [User!]! @paginate(defaultCount: 10)
+
+    #    "List multiple users without pagination."
+    #    users: [User!]! @all
+    # ! means Type should never be null value or nullable field
+}
+
+type Mutation {
+    createUser(name: String!, email: String! @rules(apply: ["email"]), password: String!) : User! @create
+    updateUser(id: ID!, name: String, email: String): User @update
+    upsertUser(id: ID!, name: String!, email: String!, password: String!): User @upsert
+    deleteUser(id: ID!): User @delete
+}
+
+type User {
+    id: ID!
+    posts: [Post]! @hasMany
+    name: String!
+    email: String!
+    email_verified_at: DateTime
+    created_at: DateTime!
+    updated_at: DateTime!
+}
